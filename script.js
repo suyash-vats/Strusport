@@ -164,4 +164,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, 6000); // Wait for initial animations
-}); 
+});
+
+// Scroll animation for about section
+const aboutSection = document.querySelector('.about-section');
+const observerOptions = {
+    threshold: 0.2
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, observerOptions);
+
+if (aboutSection) {
+    observer.observe(aboutSection);
+} 
