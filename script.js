@@ -125,6 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Add any interactive features here if needed
 });
 
 function isElementInViewport(el, container) {
@@ -144,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const starIcon = document.querySelector('.star-icon');
     const navIcons = document.querySelectorAll('.nav-icons a');
 
+    // Wait for initial animations to complete
     setTimeout(() => {
         switchInput.addEventListener('change', function() {
             if (this.checked) {
@@ -152,6 +155,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 logoText.classList.add('white');
                 starIcon.classList.add('white');
                 navIcons.forEach(icon => icon.classList.add('white'));
+            } else {
+                // Remove white theme classes
+                pageTransition.classList.remove('white');
+                logoText.classList.remove('white');
+                starIcon.classList.remove('white');
+                navIcons.forEach(icon => icon.classList.remove('white'));
             }
         });
     }, 6000); // Wait for initial animations
