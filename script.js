@@ -1,4 +1,4 @@
-// Enhanced JavaScript with advanced animations and interactions
+// Enhanced JavaScript with advanced scroll-triggered animations
 
 // Cursor follower
 document.addEventListener('DOMContentLoaded', function() {
@@ -61,45 +61,119 @@ function animateCounter(element, target, duration = 2000) {
     updateCounter();
 }
 
-// Intersection Observer for animations
+// Enhanced Intersection Observer for scroll-triggered animations
 const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.2,
+    rootMargin: '0px 0px -100px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
+            // Image layout animations
+            if (entry.target.classList.contains('image-layout')) {
+                animateImageLayout();
+            }
             
-            // Animate counters when stats section is visible
+            // Stats section animation
             if (entry.target.classList.contains('stats-section')) {
+                const statItems = entry.target.querySelectorAll('.stat-item');
+                statItems.forEach(item => item.classList.add('animate'));
+                
                 const counters = entry.target.querySelectorAll('.stat-number');
                 counters.forEach(counter => {
                     const target = parseInt(counter.getAttribute('data-target'));
-                    animateCounter(counter, target);
+                    setTimeout(() => {
+                        animateCounter(counter, target);
+                    }, 500);
                 });
+            }
+            
+            // Featured items animation
+            if (entry.target.classList.contains('featured-section')) {
+                const featuredItems = entry.target.querySelectorAll('.featured-item');
+                featuredItems.forEach(item => item.classList.add('animate'));
+            }
+            
+            // Newsletter section animation
+            if (entry.target.classList.contains('newsletter-section')) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
             }
         }
     });
 }, observerOptions);
 
+// Image layout animation function
+function animateImageLayout() {
+    const centerImage = document.querySelector('.center-image');
+    const leftImages = document.querySelectorAll('.side-images.left .image-container');
+    const rightImages = document.querySelectorAll('.side-images.right .image-container');
+    
+    // Animate center image first
+    setTimeout(() => {
+        centerImage.classList.add('animate');
+    }, 200);
+    
+    // Then animate side images
+    setTimeout(() => {
+        leftImages.forEach(img => img.classList.add('animate'));
+        rightImages.forEach(img => img.classList.add('animate'));
+    }, 800);
+}
+
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', function() {
-    const animatedElements = document.querySelectorAll('.stats-section, .featured-item, .newsletter-section');
+    const animatedElements = document.querySelectorAll(
+        '.image-layout, .stats-section, .featured-section, .newsletter-section'
+    );
     animatedElements.forEach(el => observer.observe(el));
+    
+    // Set initial states
+    const newsletterSection = document.querySelector('.newsletter-section');
+    if (newsletterSection) {
+        newsletterSection.style.opacity = '0';
+        newsletterSection.style.transform = 'translateY(50px)';
+        newsletterSection.style.transition = 'all 1s ease-out';
+    }
 });
 
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
+// Enhanced parallax effect
+let ticking = false;
+
+function updateParallax() {
     const scrolled = window.pageYOffset;
-    const parallaxElements = document.querySelectorAll('.floating-particles');
+    const rate = scrolled * -0.5;
     
-    parallaxElements.forEach(element => {
-        const speed = 0.5;
-        element.style.transform = `translateY(${scrolled * speed}px)`;
+    // Parallax for particles
+    const particles = document.querySelectorAll('.particle');
+    particles.forEach((particle, index) => {
+        const speed = 0.2 + (index * 0.1);
+        particle.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
     });
-});
+    
+    // Parallax for floating particles container
+    const floatingParticles = document.querySelector('.floating-particles');
+    if (floatingParticles) {
+        floatingParticles.style.transform = `translateY(${rate}px)`;
+    }
+    
+    // Header background opacity based on scroll
+    const header = document.querySelector('header');
+    const opacity = Math.min(scrolled / 100, 0.95);
+    header.style.background = `rgba(0, 0, 0, ${opacity})`;
+    
+    ticking = false;
+}
+
+function requestTick() {
+    if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+    }
+}
+
+window.addEventListener('scroll', requestTick);
 
 // Enhanced theme toggle
 document.addEventListener('DOMContentLoaded', function() {
@@ -153,22 +227,42 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Smooth scrolling for scroll indicator
+// Enhanced smooth scrolling for scroll indicator
 document.addEventListener('DOMContentLoaded', function() {
     const scrollIndicator = document.querySelector('.scroll-indicator');
     
     if (scrollIndicator) {
         scrollIndicator.addEventListener('click', () => {
             const imageLayout = document.querySelector('.image-layout');
-            imageLayout.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
+            
+            // Add a smooth scroll with easing
+            const targetPosition = imageLayout.offsetTop - 100;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            const duration = 1500;
+            let start = null;
+            
+            function animation(currentTime) {
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const run = easeInOutQuart(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+            
+            function easeInOutQuart(t, b, c, d) {
+                t /= d/2;
+                if (t < 1) return c/2*t*t*t*t + b;
+                t -= 2;
+                return -c/2 * (t*t*t*t - 2) + b;
+            }
+            
+            requestAnimationFrame(animation);
         });
     }
 });
 
-// Newsletter form handling
+// Newsletter form handling with enhanced animations
 document.addEventListener('DOMContentLoaded', function() {
     const newsletterForm = document.querySelector('.newsletter-form');
     const emailInput = document.querySelector('.email-input');
@@ -180,22 +274,31 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = emailInput.value.trim();
             
             if (email && isValidEmail(email)) {
-                // Animate button
+                // Enhanced button animation
                 subscribeBtn.style.transform = 'scale(0.95)';
-                subscribeBtn.textContent = 'Subscribed!';
+                subscribeBtn.innerHTML = '<i class="fas fa-check"></i> Subscribed!';
                 subscribeBtn.style.background = '#28a745';
+                
+                // Add success particle effect
+                createSuccessParticles(subscribeBtn);
                 
                 setTimeout(() => {
                     subscribeBtn.style.transform = 'scale(1)';
-                    subscribeBtn.textContent = 'Subscribe';
+                    subscribeBtn.innerHTML = 'Subscribe';
                     subscribeBtn.style.background = '';
                     emailInput.value = '';
-                }, 2000);
+                }, 3000);
                 
-                // Show success message
-                showNotification('Thank you for subscribing!', 'success');
+                // Show enhanced success message
+                showNotification('🎉 Thank you for subscribing to our newsletter!', 'success');
             } else {
-                showNotification('Please enter a valid email address', 'error');
+                // Shake animation for invalid input
+                emailInput.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    emailInput.style.animation = '';
+                }, 500);
+                
+                showNotification('⚠️ Please enter a valid email address', 'error');
             }
         });
         
@@ -204,8 +307,76 @@ document.addEventListener('DOMContentLoaded', function() {
                 subscribeBtn.click();
             }
         });
+        
+        // Add focus effects
+        emailInput.addEventListener('focus', function() {
+            this.style.transform = 'scale(1.02)';
+        });
+        
+        emailInput.addEventListener('blur', function() {
+            this.style.transform = 'scale(1)';
+        });
     }
 });
+
+// Create success particles effect
+function createSuccessParticles(element) {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #28a745;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            left: ${centerX}px;
+            top: ${centerY}px;
+        `;
+        
+        document.body.appendChild(particle);
+        
+        const angle = (i / 12) * Math.PI * 2;
+        const velocity = 100 + Math.random() * 50;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+        
+        let x = 0, y = 0, opacity = 1;
+        
+        function animateParticle() {
+            x += vx * 0.02;
+            y += vy * 0.02 + 2; // gravity
+            opacity -= 0.02;
+            
+            particle.style.transform = `translate(${x}px, ${y}px)`;
+            particle.style.opacity = opacity;
+            
+            if (opacity > 0) {
+                requestAnimationFrame(animateParticle);
+            } else {
+                document.body.removeChild(particle);
+            }
+        }
+        
+        requestAnimationFrame(animateParticle);
+    }
+}
+
+// Add shake animation to CSS
+const shakeStyle = document.createElement('style');
+shakeStyle.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+`;
+document.head.appendChild(shakeStyle);
 
 // Email validation
 function isValidEmail(email) {
@@ -213,44 +384,51 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-// Notification system
+// Enhanced notification system
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
-    notification.textContent = message;
+    notification.innerHTML = message;
+    
+    const bgColor = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff';
     
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
-        background: ${type === 'success' ? '#28a745' : '#dc3545'};
+        background: ${bgColor};
         color: white;
         padding: 1rem 2rem;
         border-radius: 25px;
         z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
+        transform: translateX(100%) scale(0.8);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         font-weight: 500;
         box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        max-width: 300px;
     `;
     
     document.body.appendChild(notification);
     
     // Animate in
     setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
+        notification.style.transform = 'translateX(0) scale(1)';
     }, 100);
     
     // Animate out and remove
     setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
+        notification.style.transform = 'translateX(100%) scale(0.8)';
         setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 400);
+    }, 4000);
 }
 
-// Enhanced image hover effects
+// Enhanced image hover effects with 3D transforms
 document.addEventListener('DOMContentLoaded', function() {
     const imageContainers = document.querySelectorAll('.image-container');
     
@@ -259,31 +437,29 @@ document.addEventListener('DOMContentLoaded', function() {
         
         container.addEventListener('mouseenter', function() {
             img.style.filter = 'brightness(1.1) contrast(1.1) saturate(1.2)';
+            img.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         });
         
         container.addEventListener('mouseleave', function() {
             img.style.filter = 'brightness(1) contrast(1) saturate(1)';
         });
-    });
-});
-
-// Featured items stagger animation
-document.addEventListener('DOMContentLoaded', function() {
-    const featuredItems = document.querySelectorAll('.featured-item');
-    
-    const featuredObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, index * 100);
-            }
+        
+        // 3D tilt effect on mouse move
+        container.addEventListener('mousemove', function(e) {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
         });
-    }, { threshold: 0.1 });
-    
-    featuredItems.forEach(item => {
-        featuredObserver.observe(item);
+        
+        container.addEventListener('mouseleave', function() {
+            container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+        });
     });
 });
 
@@ -302,7 +478,7 @@ window.addEventListener('load', function() {
     }, 500);
 });
 
-// Keyboard navigation
+// Enhanced keyboard navigation
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         // Close any open modals or overlays
@@ -311,11 +487,28 @@ document.addEventListener('keydown', function(e) {
             overlay.style.opacity = '0';
         });
     }
+    
+    // Smooth scroll with arrow keys
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        window.scrollBy({ top: 100, behavior: 'smooth' });
+    }
+    
+    if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        window.scrollBy({ top: -100, behavior: 'smooth' });
+    }
 });
 
 // Performance optimization - Reduce animations on low-end devices
 if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
-    document.documentElement.style.setProperty('--animation-duration', '0.5s');
+    document.documentElement.style.setProperty('--animation-duration', '0.3s');
+    
+    // Disable some heavy animations
+    const particles = document.querySelectorAll('.particle');
+    particles.forEach(particle => {
+        particle.style.animation = 'none';
+    });
 }
 
 // Add touch support for mobile devices
@@ -327,4 +520,60 @@ if ('ontouchstart' in window) {
     if (cursor) {
         cursor.style.display = 'none';
     }
+    
+    // Add touch-specific interactions
+    const touchElements = document.querySelectorAll('.image-container, .featured-item');
+    touchElements.forEach(element => {
+        element.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        element.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
+    });
 }
+
+// Intersection Observer for better performance
+const lazyImageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.style.opacity = '1';
+            img.style.transform = 'scale(1)';
+            lazyImageObserver.unobserve(img);
+        }
+    });
+});
+
+// Observe all images for lazy loading effects
+document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.style.opacity = '0';
+        img.style.transform = 'scale(0.9)';
+        img.style.transition = 'all 0.5s ease';
+        lazyImageObserver.observe(img);
+    });
+});
+
+// Add scroll progress indicator
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBar = document.createElement('div');
+    progressBar.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        z-index: 10000;
+        transition: width 0.1s ease;
+    `;
+    document.body.appendChild(progressBar);
+    
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        progressBar.style.width = scrollPercent + '%';
+    });
+});
