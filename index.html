@@ -6,9 +6,20 @@
     <title>Strutspot - Fashion Models & Dresses</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="cursor-follower"></div>
     <div class="page-transition">
+        <div class="floating-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        
         <header>
             <div class="logo">
                 <i class="fas fa-star star-icon"></i>
@@ -16,8 +27,8 @@
             </div>
             <nav>
                 <div class="nav-icons">
-                    <a href="#search"><i class="fas fa-search"></i></a>
-                    <a href="#cart"><i class="fas fa-shopping-bag"></i></a>
+                    <a href="#search" class="nav-item"><i class="fas fa-search"></i></a>
+                    <a href="#cart" class="nav-item"><i class="fas fa-shopping-bag"></i></a>
                     <label class="switch">
                         <input type="checkbox">
                         <span class="slider round">
@@ -28,100 +39,191 @@
                 </div>
             </nav>
         </header>
+
         <main>
-            <div class="entrance-text">
-                <span>WELCOME TO THE</span>
-                <span>WORLD OF FASHION</span>
+            <div class="hero-section">
+                <div class="entrance-text">
+                    <div class="text-line">
+                        <span class="word" data-text="WELCOME">WELCOME</span>
+                        <span class="word" data-text="TO">TO</span>
+                        <span class="word" data-text="THE">THE</span>
+                    </div>
+                    <div class="text-line">
+                        <span class="word" data-text="WORLD">WORLD</span>
+                        <span class="word" data-text="OF">OF</span>
+                        <span class="word" data-text="FASHION">FASHION</span>
+                    </div>
+                </div>
+                
+                <div class="subtitle-text">
+                    <span class="typing-text">Discover elegance in every thread</span>
+                </div>
+
+                <div class="scroll-indicator">
+                    <div class="scroll-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <span class="scroll-text">Scroll to explore</span>
+                </div>
             </div>
+
             <div class="image-layout">
                 <div class="side-images left">
-                    <img src="1.jpg" alt="Fashion 1" class="side-img">
-                    <img src="5.jpg" alt="Fashion 2" class="side-img">
+                    <div class="image-container">
+                        <img src="1.jpg" alt="Fashion 1" class="side-img">
+                        <div class="image-overlay">
+                            <span class="overlay-text">Summer Vibes</span>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <img src="5.jpg" alt="Fashion 2" class="side-img">
+                        <div class="image-overlay">
+                            <span class="overlay-text">Elegant Style</span>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="center-image">
-                    <img src="7.jpg" alt="Main Fashion" class="main-img">
+                    <div class="image-container main-container">
+                        <img src="7.jpg" alt="Main Fashion" class="main-img">
+                        <div class="image-overlay main-overlay">
+                            <span class="overlay-text main-text">Featured Collection</span>
+                            <button class="explore-btn">Explore Now</button>
+                        </div>
+                        <div class="floating-badge">New</div>
+                    </div>
                 </div>
+                
                 <div class="side-images right">
-                    <img src="4.jpg" alt="Fashion 3" class="side-img">
-                    <img src="2.jpg" alt="Fashion 4" class="side-img">
+                    <div class="image-container">
+                        <img src="4.jpg" alt="Fashion 3" class="side-img">
+                        <div class="image-overlay">
+                            <span class="overlay-text">Trendy Look</span>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <img src="2.jpg" alt="Fashion 4" class="side-img">
+                        <div class="image-overlay">
+                            <span class="overlay-text">Classic Beauty</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="1000">0</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">Fashion Items</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">Top Models</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="5">0</div>
+                    <div class="stat-label">Years Experience</div>
                 </div>
             </div>
         </main>
 
-        
         <section class="featured-section">
+            <div class="section-header">
+                <h2 class="section-title">Featured Collections</h2>
+                <p class="section-subtitle">Discover our handpicked selection of premium fashion</p>
+            </div>
+            
             <div class="featured-grid">
                 <div class="featured-item">
-                    <img src="1.jpg" alt="Summer Collection">
-                    <div class="featured-content">
-                        <h3>Summer Collection</h3>
+                    <div class="featured-image-container">
+                        <img src="1.jpg" alt="Summer Collection">
+                        <div class="featured-overlay">
+                            <div class="featured-content">
+                                <h3>Summer Collection</h3>
+                                <p>Light & Breezy</p>
+                                <button class="view-btn">View Collection</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="featured-item">
-                    <img src="2.jpg" alt="New Arrivals">
-                    <div class="featured-content">
-                        <h3>New Arrivals</h3>
+                    <div class="featured-image-container">
+                        <img src="2.jpg" alt="New Arrivals">
+                        <div class="featured-overlay">
+                            <div class="featured-content">
+                                <h3>New Arrivals</h3>
+                                <p>Fresh & Modern</p>
+                                <button class="view-btn">View Collection</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="featured-item">
-                    <img src="4.jpg" alt="Trending Styles">
-                    <div class="featured-content">
-                        <h3>Trending Styles</h3>
+                    <div class="featured-image-container">
+                        <img src="4.jpg" alt="Trending Styles">
+                        <div class="featured-overlay">
+                            <div class="featured-content">
+                                <h3>Trending Styles</h3>
+                                <p>What's Hot Now</p>
+                                <button class="view-btn">View Collection</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="featured-item">
-                    <img src="5.jpg" alt="Winter Collection">
-                    <div class="featured-content">
-                        <h3>Winter Collection</h3>
+                    <div class="featured-image-container">
+                        <img src="5.jpg" alt="Winter Collection">
+                        <div class="featured-overlay">
+                            <div class="featured-content">
+                                <h3>Winter Collection</h3>
+                                <p>Warm & Stylish</p>
+                                <button class="view-btn">View Collection</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="featured-item">
-                    <img src="7.jpg" alt="Evening Wear">
-                    <div class="featured-content">
-                        <h3>Evening Wear</h3>
+                    <div class="featured-image-container">
+                        <img src="7.jpg" alt="Evening Wear">
+                        <div class="featured-overlay">
+                            <div class="featured-content">
+                                <h3>Evening Wear</h3>
+                                <p>Elegant & Sophisticated</p>
+                                <button class="view-btn">View Collection</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="featured-item">
-                    <img src="1.jpg" alt="Casual Collection">
-                    <div class="featured-content">
-                        <h3>Casual Collection</h3>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="2.jpg" alt="Accessories">
-                    <div class="featured-content">
-                        <h3>Accessories</h3>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="4.jpg" alt="Bridal Collection">
-                    <div class="featured-content">
-                        <h3>Bridal Collection</h3>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="5.jpg" alt="Party Wear">
-                    <div class="featured-content">
-                        <h3>Party Wear</h3>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="7.jpg" alt="Summer Collection">
-                    <div class="featured-content">
-                        <h3>Summer Collection</h3>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="1.jpg" alt="New Arrivals">
-                    <div class="featured-content">
-                        <h3>New Arrivals</h3>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="2.jpg" alt="Trending Styles">
-                    <div class="featured-content">
-                        <h3>Trending Styles</h3>
+                    <div class="featured-image-container">
+                        <img src="1.jpg" alt="Casual Collection">
+                        <div class="featured-overlay">
+                            <div class="featured-content">
+                                <h3>Casual Collection</h3>
+                                <p>Comfort Meets Style</p>
+                                <button class="view-btn">View Collection</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <section class="newsletter-section">
+            <div class="newsletter-content">
+                <h2 class="newsletter-title">Stay In Style</h2>
+                <p class="newsletter-subtitle">Get the latest fashion trends delivered to your inbox</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" class="email-input">
+                    <button class="subscribe-btn">Subscribe</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
